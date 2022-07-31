@@ -100,8 +100,13 @@
         transform: translateY(-50%);
     }
 
+    ul#list li span.delete:hover {
+        opacity: 1;
+    } 
+
     ul#list li span.delete {
         right: 10px;
+        opacity: 0;
     } 
 
     .change {
@@ -152,8 +157,6 @@
 
             span1.classList.add('todo-text');
             span2.classList.add('delete', 'iconfont');
-
-            
 
             span1.innerText = value;
             span2.innerHTML = `<i class="iconfont">&#xe686;</i>`;
@@ -206,16 +209,6 @@
             }
         } 
     })
-
-
-
-
-
-
-
-
-
-
 
 </script>
 </html>
