@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1077659_v4ls5q0r4w.css"> 
+    <title>TODOS</title>
+</head>
+<style>
+    *{
+        margin:0;
+        padding: 0;
+        list-style: none;
+    }
+
+    html, body{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    @font-face {
+        font-family: 'iconfont';
+        src: url('./asset/iconfont.woff2?t=1659279780365') format('woff2'),
+            url('./asseticonfont.woff?t=1659279780365') format('woff'),
+            url('./asseticonfont.ttf?t=1659279780365') format('truetype');
+        }
+
+    .iconfont {
+        font-family: "iconfont" !important;
+        font-size: 16px;
+        font-style: normal;
+        margin: 5px 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .out-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(175, 175, 217);
+    }
+
+    .todolist-container {
+        width: 400px;
+        height: 300px;
+        /* background-color: white; */
+    }
+
+    .todolist-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .box-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .input-container {
+        width: 90%;
+        height: 35px;
+        padding: 0 15px;
+        background-color: white;
+    }
+
+    .input-container #input {
+        height: 100%;
+        width: 80%;
+        border:none;
+        outline: none;
+    }
+
+    .input-container:hover {
+        border: 2px solid gray;
+    }
+
+    .todos-box {
+        width: 90%;
+        padding: 0 15px;
+        background-color: white;
+    }
+
+    ul#list li {
+        width: 100%;
+        height: 35px;
+        margin: 0 10px;
+        position: relative;
+    }
+
+    ul#list li span {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    ul#list li span.delete {
+        right: 10px;
+    } 
+
+    .change {
+        display: none;
+    }
+    
+</style>
+<body>
+    <div class="out-container">
+        <div class="todolist-container">
+            <h1 class='todolist-title'>TODOS</h1>
+            <div class="box-container">
+                <div class="input-container">
+                    <span id='hidden'>
+                        <i class="iconfont">&#xe687;</i>
+                    </span>
+                    <input type="text" id="input">
+                </div>
+                <div class="todos-box">
+                    <ul id="list">
+                        <!-- 利用document.appendChild插入li -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // 获取dom元素
+    const input = document.getElementById('input');
+    const ul = document.getElementById('list');
+    const hidden = document.getElementById('hidden');
+
+
+    // 监听input的keydown事件
+    input.addEventListener('keydown', function(event) {
+        // 回车的keycode是13
+        if (event.keyCode === 13) {
+            const value = input.value;
+
+            if (value === '') {
+                alert('The input is empty!');
+            }
+
+            let li = document.createElement('li');
+            let span1 = document.createElement('span');   // 放文字的
+            let span2 = document.createElement('span');   // 放x的
+
+            span1.classList.add('todo-text');
+            span2.classList.add('delete', 'iconfont');
+
+            
+
+            span1.innerText = value;
+            span2.innerHTML = `<i class="iconfont">&#xe686;</i>`;
+
+            // 添加
+            li.appendChild(span1);
+            li.appendChild(span2);
+            ul.appendChild(li);
+
+            // 重置input的值为空
+            input.value = '';
+
+            // 删除功能
+            span2.onclick = function() {
+                // this指的是span2，下面代码的意思是删除ul下面的包含这个span2的父组件也就是li
+                ul.removeChild(this.parentNode);
+            }
+
+            // 向下箭头的功能
+            hidden.onclick = function() {
+                ul.classList.toggle("change");    // toggle有则删除，无则添加
+
+                if (ul.classList.contains("change")) {
+                    hidden.innerHTML = `<i class="iconfont">&#xe685;</i>`;
+                } else {
+                    hidden.innerHTML = `<i class="iconfont">&#xe687;</i>`;
+                }
+            }
+        }
+    })
+
+
+    // 模糊搜索功能
+    // 监听input
+    input.addEventListener("keyup", function(event) {
+        // 只要keyup就获得input的值
+        const value = event.target.value;
+
+        // 正则匹配
+        const reg = new RegExp('(' + value + ')', 'g');
+
+        const todos = document.getElementsByClassName('todo-text');
+        
+        for (let i = 0; i < todos.length; i++) {
+            const item = todos[i];
+            const spanValue = item.innerText;
+
+            if (spanValue.indexOf(value) !== -1) {
+                item.innerHTML = item.innerText.replace(reg, '<font color=red>$1</font>');
+            }
+        } 
+    })
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
